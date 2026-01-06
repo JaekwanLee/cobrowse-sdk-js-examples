@@ -10,24 +10,30 @@
     e=document.getElementsByTagName(t)[0];e.parentNode.insertBefore(s,e);s.onload=function()
     {r(w[c]);};}return p;}};});})(window,'script','CobrowseIO');
 
-    // FOR SECURITY REASONS DO NOT SET YOUR LICENSE KEY OR API USING QUERY PARAMETERS IN YOUR OWN APPLICATION
+    // // FOR SECURITY REASONS DO NOT SET YOUR LICENSE KEY OR API USING QUERY PARAMETERS IN YOUR OWN APPLICATION
     CobrowseIO.license = urlParams.get('license') || 'trial'; // change to your license key
     CobrowseIO.api = urlParams.get('api') || 'https://api.cobrowse.io';
+
     CobrowseIO.client().then(function(){
+      if (CobrowseIO.currentSession) {
         CobrowseIO.start({allowIFrameStart:true});
+      }
     });
 
     // generateSupportCode();
     function generateSupportCode() {
       // ensure Cobrowse is loaded
-      CobrowseIO.client().then(function () {
-        // create a code and display it to the user
-        CobrowseIO.createSessionCode().then(function (code) {
-          document.getElementById('generate-button').style.display = 'none';
-          document.getElementById('support-code').innerHTML = '<p>Your Support Code is ' + code.substr(0, 3) + '-' + code.substr(3, 6) + '</p>';
-          CobrowseIO.currentSession.on('ended', function () {
-            onExpire();
-          })
+      CobrowseIO.client().then(function() {
+        // start the CobrowseSDK only when this function is called
+        CobrowseIO.start().then(function() {
+          // create a code a display it to the user
+          CobrowseIO.createSessionCode().then(function(code) {
+            document.getElementById('generate-button').style.display = 'none';
+            document.getElementById('support-code').innerHTML = '<p>Your Support Code is ' + code.substr(0, 3) + '-' + code.substr(3, 6) + '</p>';
+            CobrowseIO.currentSession.on('ended', function () {
+              onExpire();
+            })
+          });
         });
       });
     }

@@ -1,0 +1,11 @@
+:root {
+  --icon-size: 1.5rem;
+  --icon-color: inherit;
+  --icon-weight: 400;
+}
+
+.icon {
+  height: var(--icon-size);
+  width: var(--icon-size);
+  color: var(--icon-color);
+}
